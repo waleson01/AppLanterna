@@ -75,7 +75,67 @@ namespace AppLight
 
                 case Plugin.Battery.Abstractions.BatteryStatus.NotCharging:
                     lbl_status.Text = "Não Carregando";
+                    break;
+
+                case Plugin.Battery.Abstractions.BatteryStatus.Unknown:
+                    lbl_status.Text = "Desconhecido";
+                    break;
             }
+
+            switch (e.PowerSource)
+            {
+                case Plugin.Battery.Abstractions.PowerSource.Ac:
+                    lbl_fonte_carregamento.Text = "Carregador";
+                    break;
+
+                case Plugin.Battery.Abstractions.PowerSource.Battery:
+                    lbl_fonte_carregamento.Text = "Bateria";
+                    break;
+
+                case Plugin.Battery.Abstractions.PowerSource.Usb:
+                    lbl_fonte_carregamento.Text = "USB";
+                    break;
+
+                case Plugin.Battery.Abstractions.PowerSource.Wireless:
+                    lbl_fonte_carregamento.Text = "Sem Fio";
+                    break;
+
+                case Plugin.Battery.Abstractions.PowerSource.Other:
+                    lbl_fonte_carregamento.Text = "Desconhecida";
+                    break;
+            }
+
+        }
+        catch (Exception ex)
+        {
+            await DisplayAlert("Ocorreu um erro: \n ", ex.Message, "OK");
+        }
+    }
+
+    private async void btnOnOff_Clicked (object sender, EventArgs e)
+    {
+        try
+        {
+            if (!laterna_ligada)
+            {
+                laterna_ligada = true;
+
+                btnOnOff.Source = ImageSource.FromResource("AppLigth.Images.botao-ligado.jpg");
+                Vibration.Vibrate(TimeSpan.FromMilliseconds(250));
+                await Flashlight.TurnOnAsync();
+            }
+            else
+            {
+                lanterna_ligada = false;
+                btnOnOff.Source = ImageSource.FromResource("AppLight.Images.botao-desligado.jpg");
+                Vibration.Vibrate(TimeSpan.FromMilliseconds(250));
+                await Flashlight.TurnOffAsync();
+            }
+        }
+
+        catch (Exception ex)
+        {
+            await DisplayAlert("Ocorreu um erro: \n ", ex.Message, "OK");
         }
     }
 
