@@ -23,37 +23,37 @@ namespace AppLight
             Carrega_Informacoes_Bateria();
         }
 
-    }
+    
 
-    private async void Carrega_Informacoes_bateria()
-    {
-        try
-        {
-            if (CrossBattery.IsSupported)
+         private async void Carrega_Informacoes_Bateria()
+          {
+             try
+             {
+                if (CrossBattery.IsSupported)
+                {​​​​
+                    CrossBattery.Current.BatteryChanged -= Mudanca_Status_Bateria;
+                    CrossBattery.Current.BatteryChanged += Mudanca_Status_Bateria;
+                }​​​​
+                else
+                {
+                    lbl_bateria_fraca.Text = "As informações sobre a bateria não está disponível :( ";
+                }
+             }
+            catch (Exception ex)
             {
-                CrossBattery.Current.BatteryChanged -= Mudanca_Status_Bateria;
-                CrossBattery.Current.BatteryChanged += Mudanca_Status_Bateria;
+                await DisplayAlert("Ocorreu um erro: \n", ex.Message, "OK!");
             }
-            else
-            {
-                lbl_bateria_fraca.Text = "As informações sobre a bateria não está disponível :( ";
-            }
-        }
-        catch (Exception ex)
-        {
-            await DisplayAlert("Ocorreu um erro: \n", ex.Message, "OK!");
-        }
-    }
+          }
 
     private async void Mudanca_Status_Bateria (object sender, Plugin.Battery.Abstractions.BatteryChangedEventsAgrs e)
     {
         try
         {
-            lbl_porcentagem_restante.Text = e.RemainingCharge.ToString() + "%";
+            lbl_porcentagem_restante.Text = e.RemainingChargePercent.ToString() + "%";
             
             if (e.Islow)
             {
-                lbl_bateria_fraca = "A bateria está fraca!";
+                lbl_bateria_fraca.Text = "A bateria está fraca!";
             }
             else
             {
@@ -142,4 +142,5 @@ namespace AppLight
 
 
 
+    }
 }
